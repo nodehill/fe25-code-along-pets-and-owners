@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { useNavigate } from 'react-router';
 
 CreatePetOwner.route = {
   path: '/create-petowner',
@@ -16,6 +16,7 @@ export default function CreatePetOwner() {
 
   const [formData, setFormData] = useState(formInitialState)
   const [formSent, setFormSent] = useState(false)
+  const navigate = useNavigate()
 
   function updateFormData(event) {
     //console.log(event)
@@ -47,6 +48,8 @@ export default function CreatePetOwner() {
         setFormSent(false);
         setFormData({ ...formInitialState })
       }}>Create another pet owner</button>
+      <button onClick={() => navigate('/pets-and-owners')}>
+        See the list of pets and their owners</button>
     </>
 
   } else {
