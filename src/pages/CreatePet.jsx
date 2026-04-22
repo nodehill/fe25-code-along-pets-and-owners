@@ -22,8 +22,10 @@ export default function CreatePet() {
 
 
   const [petOwners, loading] = useFetch('/api/petOwners/')
+  const [unique_species, loading2] = useFetch('/api/unique_species/')
+  const [showSpeciesInput, setShowSpeciesInput] = useState(false)
 
-  if (loading) return <p>Loading...</p>
+  if (loading || loading2) return <p>Loading...</p>
 
   function updateFormData(event) {
     const { name: key, value } = event.target;
@@ -38,6 +40,18 @@ export default function CreatePet() {
       body: JSON.stringify(formData)
     })
     setFormSent(true)
+  }
+
+
+
+  function setSpecies(event) {
+    if (event.target.value !== "__new__") {
+      setShowSpeciesInput(false)
+      setFormData({ species: event.target.value })
+    } else {
+      setShowSpeciesInput(true)
+      setFormData({ species: '' })
+    }
   }
 
   if (formSent) {
@@ -63,8 +77,18 @@ export default function CreatePet() {
         </label>
         <label>
           Species:
-          <input name="species" type="text" placeholder="Species" value={formData.species} onChange={updateFormData} />
+          <select name="unique_species" onChange={setSpecies}>
+            <option key="" value="">Select species</option>
+            {
+              unique_species.map(spec => <option key={spec.species} value={spec.species}>{spec.species}</option>)
+            }
+            <option value="__new__">Other (add new species..)</option>
+          </select>
+          {
+            showSpeciesInput && <input name="species" type="text" placeholder="Species" value={formData.species} onChange={updateFormData} />
+          }
         </label>
+
 
         <label>
           Owner:
