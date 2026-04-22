@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router';
 import useFetch from '../utils/useFetch';
 import HeroImage from "../parts/HeroImage";
@@ -15,6 +16,8 @@ export default function PetsAndOwners() {
     '/api/petOwners'
   );
 
+  const [deletedPetOwners, addDeletedPetOwner] = useState([])
+
   if (loading) return
 
   const petsByOwnerId = Object.groupBy(pets, eachPet => eachPet.ownerId)
@@ -22,6 +25,13 @@ export default function PetsAndOwners() {
   console.log('petsByOwnerId after group by', petsByOwnerId)
 
   const homelessPets = petsByOwnerId.null ?? []
+
+  async function deletePetOwner(id) {
+    console.log('deletePetOwner', id)
+    await fetch('/api/petOwners/' + id, { method: 'DELETE' })
+    addDeletedPetOwner(currentList => [...currentList, id])
+    console.log(deletedPetOwners)
+  }
 
   return !loading && <>
     <HeroImage
@@ -34,28 +44,31 @@ export default function PetsAndOwners() {
     <h3>Pets by owner</h3>
     <section className="pet-owners">
       {
-        petOwners.map(({ id, name, email }) => {
-          const ownedPets = petsByOwnerId[id] ?? []
-          console.log('ownedPets', ownedPets)
-          return <div key={id}>
-            <h4>{name}</h4>
-            <p>{name} has the email <a href={`mailto:${email}`}>{email}</a>.</p>
-            <Link to={'/update-owner/' + id}>Edit {name}</Link>
+        petOwners
+          .filter(({ id }) => !deletedPetOwners.includes(id))
+          .map(({ id, name, email }) => {
+            const ownedPets = petsByOwnerId[id] ?? []
+            console.log('ownedPets', ownedPets)
+            return <div key={id}>
+              <h4>{name}</h4>
+              <p>{name} has the email <a href={`mailto:${email}`}>{email}</a>.</p>
+              <Link to={'/update-owner/' + id}>Edit {name}</Link>
+              <button onClick={() => deletePetOwner(id)}>Delete {name}</button>
 
-            {ownedPets.length === 0 ? <p>{name} has no pets</p> : <>
-              <p>{name} has the pets:</p>
-              <ul>
-                {ownedPets.map(({ id, name, species }) => {
-                  // if the function body is wrapped in {} we must return explicitly
-                  return <li key={id}>{name} {species}</li>
-                })}
-              </ul>
-            </>
-            }
+              {ownedPets.length === 0 ? <p>{name} has no pets</p> : <>
+                <p>{name} has the pets:</p>
+                <ul>
+                  {ownedPets.map(({ id, name, species }) => {
+                    // if the function body is wrapped in {} we must return explicitly
+                    return <li key={id}>{name} {species}</li>
+                  })}
+                </ul>
+              </>
+              }
 
-          </div>
-        }
-        )
+            </div>
+          }
+          )
       }
     </section>
 
