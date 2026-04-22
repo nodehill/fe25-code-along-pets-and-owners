@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import useFetch from '../utils/useFetch';
 import HeroImage from "../parts/HeroImage";
 
@@ -39,6 +40,7 @@ export default function PetsAndOwners() {
           return <div key={id}>
             <h4>{name}</h4>
             <p>{name} has the email <a href={`mailto:${email}`}>{email}</a>.</p>
+            <Link to={'/update-owner/' + id}>Edit {name}</Link>
 
             {ownedPets.length === 0 ? <p>{name} has no pets</p> : <>
               <p>{name} has the pets:</p>
