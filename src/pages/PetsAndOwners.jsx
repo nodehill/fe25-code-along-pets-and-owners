@@ -19,21 +19,35 @@ export default function PetsAndOwners() {
     '/api/petOwners'
   );
 
-  const [deletedPetOwners, addDeletedPetOwner] = useState([]);
+  const [deletedPetOwnerIds, setDeletedPetOwnerIds] = useState([]);
 
-  if (loading) return;
+  if (loading) { return; }
 
   const petsByOwnerId = Object.groupBy(pets, eachPet => eachPet.ownerId);
-  console.log('pets before group by', pets);
-  console.log('petsByOwnerId after group by', petsByOwnerId);
 
   const homelessPets = petsByOwnerId.null ?? [];
 
   async function deletePetOwner(id) {
-    console.log('deletePetOwner', id);
-    await fetch('/api/petOwners/' + id, { method: 'DELETE' });
-    addDeletedPetOwner(currentList => [...currentList, id]);
-    console.log(deletedPetOwners);
+    let error, data;
+    // use try .. catch to catch errors because bad network,
+    // badly formatted json etc
+    try {
+      let response = await fetch('/api/petOwners/' + id, { method: 'DELETE' });
+      data = await response.json();
+    }
+    catch (catchError) {
+      error = catchError;
+    }
+    // but errors can also come from the rest-api that sends the property
+    // error for SQLite errors like key-constraints on delete etc.
+    error = error || data.error;
+    // if we have an error report to use and make an early return
+    if (error) {
+      alert('Could not delete this owner!');
+      return;
+    }
+    // otherwise add the id of the deleted petowner to deletedPetOwnerIds list
+    setDeletedPetOwnerIds(currentList => [...currentList, id]);
   }
 
   return !loading && <>
@@ -48,10 +62,9 @@ export default function PetsAndOwners() {
     <section className="pet-owners">
       {
         petOwners
-          .filter(({ id }) => !deletedPetOwners.includes(id))
+          .filter(({ id }) => !deletedPetOwnerIds.includes(id))
           .map(({ id, name, email }) => {
             const ownedPets = petsByOwnerId[id] ?? [];
-            console.log('ownedPets', ownedPets);
             return <div key={id}>
               <h4>{name}</h4>
               <p>{name} has the email <a href={`mailto:${email}`}>{email}</a>.</p>
