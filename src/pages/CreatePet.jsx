@@ -1,56 +1,60 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import useFetch from '../utils/useFetch'
+import useFetch from '../utils/useFetch';
 
 CreatePet.route = {
   path: '/create-pet',
   label: 'Create a pet ',
   index: 6
-}
+};
 
 export default function CreatePet() {
 
   const formInitialState = {
     name: '',
     species: '',
-    ownerId: '' // ≈ inget värde (null, 0?), (constraint: Must add owner?)
-  }
 
-  const [formData, setFormData] = useState(formInitialState)
-  const [formSent, setFormSent] = useState(false)
-  const navigate = useNavigate()
+    ownerId: '0' // see explanation in sendForm
+  };
+
+  const [formData, setFormData] = useState(formInitialState);
+  const [formSent, setFormSent] = useState(false);
+  const navigate = useNavigate();
 
 
-  const [petOwners, loading] = useFetch('/api/petOwners/')
-  const [unique_species, loading2] = useFetch('/api/unique_species/')
-  const [showSpeciesInput, setShowSpeciesInput] = useState(false)
+  console.log(formData);
 
-  if (loading || loading2) return <p>Loading...</p>
+  const [petOwners, loading] = useFetch('/api/petOwners/');
+  const [unique_species, loading2] = useFetch('/api/unique_species/');
+  const [showSpeciesInput, setShowSpeciesInput] = useState(false);
+
+  if (loading || loading2) return <p>Loading...</p>;
 
   function updateFormData(event) {
     const { name: key, value } = event.target;
-    setFormData({ ...formData, [key]: value })
+    setFormData({ ...formData, [key]: value });
   }
 
   async function sendForm(event) {
-    event.preventDefault()
+    event.preventDefault();
     await fetch('/api/pets', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    })
-    setFormSent(true)
+      body: JSON.stringify(formData,
+        // we are using '0' for ownerId since it works well as a value in the form
+        // but the database/REST-api wants null so we transofrm
+        (key, value) => key === 'ownerId' && value === '0' ? null : value)
+    });
+    setFormSent(true);
   }
-
-
 
   function setSpecies(event) {
     if (event.target.value !== "__new__") {
-      setShowSpeciesInput(false)
-      setFormData({ species: event.target.value })
+      setShowSpeciesInput(false);
+      setFormData({ ...formData, species: event.target.value });
     } else {
-      setShowSpeciesInput(true)
-      setFormData({ species: '' })
+      setShowSpeciesInput(true);
+      setFormData({ ...formData, species: '' });
     }
   }
 
@@ -60,11 +64,11 @@ export default function CreatePet() {
       <p>The pet  {formData.name} has been created</p>
       <button onClick={() => {
         setFormSent(false);
-        setFormData({ ...formInitialState })
+        setFormData({ ...formInitialState });
       }}>Create another pet </button>
       <button onClick={() => navigate('/pets-and-owners')}>
         See the list of pets and their owners</button>
-    </>
+    </>;
 
   } else {
 
@@ -73,7 +77,7 @@ export default function CreatePet() {
       <form onSubmit={sendForm}>
         <label>
           Name:
-          <input name="name" type="text" placeholder="Name" value={formData.name} onChange={updateFormData} />
+          <input required name="name" type="text" placeholder="Name" value={formData.name} onChange={updateFormData} />
         </label>
         <label>
           Species:
@@ -85,7 +89,7 @@ export default function CreatePet() {
             <option value="__new__">Other (add new species..)</option>
           </select>
           {
-            showSpeciesInput && <input name="species" type="text" placeholder="Species" value={formData.species} onChange={updateFormData} />
+            showSpeciesInput && <input required name="species" type="text" placeholder="Species" value={formData.species} onChange={updateFormData} />
           }
         </label>
 
@@ -102,7 +106,7 @@ export default function CreatePet() {
 
         <button type="submit">Create</button>
       </form>
-    </>
+    </>;
 
   }
 
