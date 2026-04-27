@@ -3,7 +3,7 @@ import HeroImage from "../parts/HeroImage";
 
 PetsAndOwnersAlt2.route = {
   path: '/pets-and-owners-alt-2',
-  label: 'Pets & owners Alt 2',
+  // label: 'Pets & owners Alt 2',
   index: 4,
   loader: async () => {
     return await Promise.all(

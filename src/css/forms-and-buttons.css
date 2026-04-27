@@ -75,4 +75,23 @@ button {
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  &[type="submit"] {
+    float: right;
+    margin-right: 0;
+  }
+}
+
+/* Buttons inside .pet-owners and .pets elements needs another color
+   since they use the same color as the background of those elements */
+.pet-owners,
+.pets {
+  button {
+    color: #333;
+    background-color: #ddd;
+
+    &:hover {
+      background-color: #eee;
+    }
+  }
 }

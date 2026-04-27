@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import useFetch from '../utils/useFetch';
 import HeroImage from "../parts/HeroImage";
 
@@ -11,26 +11,29 @@ PetsAndOwners.route = {
 
 export default function PetsAndOwners() {
 
+  // useNavigate returns a function we can use to navigate to a route
+  const navigate = useNavigate();
+
   const [pets, petOwners, loading] = useFetch(
     '/api/pets',
     '/api/petOwners'
   );
 
-  const [deletedPetOwners, addDeletedPetOwner] = useState([])
+  const [deletedPetOwners, addDeletedPetOwner] = useState([]);
 
-  if (loading) return
+  if (loading) return;
 
-  const petsByOwnerId = Object.groupBy(pets, eachPet => eachPet.ownerId)
-  console.log('pets before group by', pets)
-  console.log('petsByOwnerId after group by', petsByOwnerId)
+  const petsByOwnerId = Object.groupBy(pets, eachPet => eachPet.ownerId);
+  console.log('pets before group by', pets);
+  console.log('petsByOwnerId after group by', petsByOwnerId);
 
-  const homelessPets = petsByOwnerId.null ?? []
+  const homelessPets = petsByOwnerId.null ?? [];
 
   async function deletePetOwner(id) {
-    console.log('deletePetOwner', id)
-    await fetch('/api/petOwners/' + id, { method: 'DELETE' })
-    addDeletedPetOwner(currentList => [...currentList, id])
-    console.log(deletedPetOwners)
+    console.log('deletePetOwner', id);
+    await fetch('/api/petOwners/' + id, { method: 'DELETE' });
+    addDeletedPetOwner(currentList => [...currentList, id]);
+    console.log(deletedPetOwners);
   }
 
   return !loading && <>
@@ -47,28 +50,25 @@ export default function PetsAndOwners() {
         petOwners
           .filter(({ id }) => !deletedPetOwners.includes(id))
           .map(({ id, name, email }) => {
-            const ownedPets = petsByOwnerId[id] ?? []
-            console.log('ownedPets', ownedPets)
+            const ownedPets = petsByOwnerId[id] ?? [];
+            console.log('ownedPets', ownedPets);
             return <div key={id}>
               <h4>{name}</h4>
               <p>{name} has the email <a href={`mailto:${email}`}>{email}</a>.</p>
-              <Link to={'/update-owner/' + id}>Edit {name}</Link>
+              <button onClick={() => navigate('/update-owner/' + id)}>Edit {name}</button>
               <button onClick={() => deletePetOwner(id)}>Delete {name}</button>
-
               {ownedPets.length === 0 ? <p>{name} has no pets</p> : <>
                 <p>{name} has the pets:</p>
                 <ul>
                   {ownedPets.map(({ id, name, species }) => {
                     // if the function body is wrapped in {} we must return explicitly
-                    return <li key={id}>{name} {species}</li>
+                    return <li key={id}>{name} {species}</li>;
                   })}
                 </ul>
               </>
               }
-
-            </div>
-          }
-          )
+            </div>;
+          })
       }
     </section>
 
