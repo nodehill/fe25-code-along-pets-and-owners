@@ -59,7 +59,6 @@ export default function CreatePet() {
   }
 
   if (formSent) {
-
     return <>
       <p>The pet  {formData.name} has been created</p>
       <button onClick={() => {
@@ -92,7 +91,6 @@ export default function CreatePet() {
             showSpeciesInput && <input required name="species" type="text" placeholder="Species" value={formData.species} onChange={updateFormData} />
           }
         </label>
-
 
         <label>
           Owner:
