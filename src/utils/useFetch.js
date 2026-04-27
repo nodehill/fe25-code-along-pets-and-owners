@@ -12,7 +12,7 @@ export default function useFetch(...urls) {
   // a flag if we are loading or finished
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  function update() {
     // if a key consisting of all urls does not exist in inProgress
     // then add fetch + unpack/deserialize fetched data as promises
     // for each url
@@ -27,7 +27,11 @@ export default function useFetch(...urls) {
       // delete the urls key in inProgress
       delete inProgress[urls];
     })();
-  }, []);
+  }
+
+  useEffect(update, []);
   // return the data + the loading flag as an array
-  return [...data, loading];
+  // + an update function the component can use
+  // to redo the fetch
+  return [...data, loading, update];
 }
