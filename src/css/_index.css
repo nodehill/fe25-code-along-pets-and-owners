@@ -16,5 +16,8 @@
 @import './main.css';
 @import './footer.css';
 
+/* forms and buttons */
+@import './forms-and-buttons.css';
+
 /* styling for lists of pets and pet owners */
 @import './pets-and-owners.css';
