@@ -41,7 +41,7 @@ export default function PetsAndOwners() {
     // but errors can also come from the rest-api that sends the property
     // error for SQLite errors like key-constraints on delete etc.
     error = error || data.error;
-    // if we have an error report to use and make an early return
+    // if we have an error report to the user and make an early return
     if (error) {
       alert('Could not delete this owner!');
       return;
