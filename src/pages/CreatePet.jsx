@@ -97,7 +97,7 @@ export default function CreatePet() {
         <label>
           Owner:
           <select name="ownerId" value={formData.ownerId} onChange={updateFormData}>
-            <option key="0" value="0">Select owner</option>
+            <option key="0" value="0">No owner</option>
             {
               petOwners.map(owner => <option key={owner.id} value={owner.id}>{owner.name}</option>)
             }
