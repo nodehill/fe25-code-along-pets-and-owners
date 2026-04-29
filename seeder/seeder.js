@@ -52,7 +52,7 @@ async function createPetOwners() {
   // Write each owner to strapi in a loop
   for (let i = 0; i < NUMBER_OF_PET_OWNERS; i++) {
     let response = await fetch(
-      `http://${STRAPI_HOST}:${STRAPI_PORT}/api/pet-owner`,
+      `http://${STRAPI_HOST}:${STRAPI_PORT}/api/pet-owners`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
