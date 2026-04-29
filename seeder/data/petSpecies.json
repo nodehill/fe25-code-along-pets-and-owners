@@ -1,0 +1,62 @@
+[
+  {
+    "species": "dog",
+    "percent": 38
+  },
+  {
+    "species": "cat",
+    "percent": 25
+  },
+  {
+    "species": "gold-fish",
+    "percent": 8
+  },
+  {
+    "species": "parakeet",
+    "percent": 6
+  },
+  {
+    "species": "hamster",
+    "percent": 5
+  },
+  {
+    "species": "rabbit",
+    "percent": 4
+  },
+  {
+    "species": "guinea-pig",
+    "percent": 3
+  },
+  {
+    "species": "turtle",
+    "percent": 3
+  },
+  {
+    "species": "canary",
+    "percent": 2
+  },
+  {
+    "species": "cockatiel",
+    "percent": 2
+  },
+  {
+    "species": "ferret",
+    "percent": 1
+  },
+  {
+    "species": "gecko",
+    "percent": 1
+  },
+  {
+    "species": "bearded-dragon",
+    "percent": 1
+  },
+  {
+    "species": "mouse",
+    "percent": 1
+  },
+  {
+    "species": "snake",
+    "percent": 1
+  }
+]
