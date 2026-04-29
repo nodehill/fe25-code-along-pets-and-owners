@@ -50,6 +50,7 @@ async function createPetOwners() {
   // randomize pet owner order/selection
   shuffleArray(petOwners);
   // Write each owner to strapi in a loop
+  const ownerIds = [];
   for (let i = 0; i < NUMBER_OF_PET_OWNERS; i++) {
     let response = await fetch(
       `http://${STRAPI_HOST}:${STRAPI_PORT}/api/pet-owners`,
@@ -59,11 +60,13 @@ async function createPetOwners() {
         body: JSON.stringify({ data: petOwners[i] })
       }
     );
-    let status = await response.json();
+    let answer = await response.json();
+    ownerIds.push(answer.documentId);
     console.log(`Creating pet owner ${i + 1}/${NUMBER_OF_PET_OWNERS}`);
-    console.log('Answer from Strapi', status);
+    console.log('Answer from Strapi', answer);
     console.log('');
   }
+  return ownerIds;
 }
 
 createPetOwners();
