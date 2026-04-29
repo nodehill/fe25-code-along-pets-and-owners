@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "concurrently npm:backend npm:dev",
-    "backend": "node backend/index.js",
+    "start": "concurrently npm:strapi-dev npm:dev",
+    "strapi-dev": "cd strapi && npm run develop",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",

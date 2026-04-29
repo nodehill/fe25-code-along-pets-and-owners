@@ -1,16 +1,24 @@
-# React + Vite
+# Pet Shelter
+This is a mono-repo for teaching purposes!
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Root level is a Vite+React+JS project.
 
-Currently, two official plugins are available:
+As a backend we use the CMS strapi (contained in the strapi folder)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Install dependencies
+To install all dependencies
 
-## React Compiler
+```
+npm install
+cd strapi
+npm install
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Why don't we use npm workspaces? Currently strapi has an issue with installing its dependencies correctly when using npm workspaces.
 
-## Expanding the ESLint configuration
+### Start the dev environment
+In the root folder run
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+npm start
+```
