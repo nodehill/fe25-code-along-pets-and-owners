@@ -22,3 +22,11 @@ In the root folder run
 ```
 npm start
 ```
+
+### Admin credentials for strapi during development
+
+```
+Admin Adminson
+Email: admin@adminson.com
+Password: Admin123
+```
