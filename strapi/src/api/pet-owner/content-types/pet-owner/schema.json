@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pet_owners",
+  "info": {
+    "singularName": "pet-owner",
+    "pluralName": "pet-owners",
+    "displayName": "Pet Owner"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    }
+  }
+}
