@@ -39,7 +39,7 @@ function generatePetData() {
   let pets = [];
   for (let i = 0; i < NUMBER_OF_PETS; i++) {
     pets.push({
-      name: petNames.shift(),
+      name: petNames.shift().name,
       species: randomItemFromArray(speciesList)
     });
   }
@@ -61,7 +61,7 @@ async function createPetOwners() {
       }
     );
     let answer = await response.json();
-    ownerIds.push(answer.documentId);
+    ownerIds.push(answer.data.documentId);
     console.log(`Creating pet owner ${i + 1}/${NUMBER_OF_PET_OWNERS}`);
     console.log('Answer from Strapi', answer);
     console.log('');
@@ -69,4 +69,39 @@ async function createPetOwners() {
   return ownerIds;
 }
 
-createPetOwners();
+
+async function createPets(ownerIds) {
+  const pets = generatePetData();
+  // Add owners according to settings
+  let counter = 1;
+  for (let pet of pets) {
+    let ownerId;
+    // set an owner on the percentage of pets that should have an owner
+    if (Math.random() * 100 >= PETS_WITHOUT_OWNERS_PERCENT) {
+      // the while loop make sure an owners can't own too many pets
+      while (
+        !ownerId ||
+        pets.filter(pet => pet.owner === ownerId).length >= MAX_PETS_PER_OWNER
+      ) {
+        ownerId = randomItemFromArray(ownerIds);
+      }
+      pet.owner = ownerId;
+    }
+    let response = await fetch(
+      `http://${STRAPI_HOST}:${STRAPI_PORT}/api/pets`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: pet })
+      }
+    );
+    let answer = await response.json();
+    console.log(`Creating pet ${counter++}/${pets.length}`);
+    console.log('Answer from Strapi', answer);
+    console.log('');
+  }
+}
+
+// run everything
+const ownerIds = await createPetOwners();
+createPets(ownerIds);
