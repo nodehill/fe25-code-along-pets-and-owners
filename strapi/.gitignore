@@ -121,7 +121,7 @@ coverage
 # Strapi
 ############################
 
-.env
+# .env is intentionally committed in this teaching repo — see README.
 license.txt
 exports
 .strapi

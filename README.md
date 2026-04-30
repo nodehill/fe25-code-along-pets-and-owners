@@ -30,3 +30,9 @@ Admin Adminson
 Email: admin@adminson.com
 Password: Admin123
 ```
+
+### A note on `strapi/.env`
+
+The `strapi/.env` file (containing `JWT_SECRET`, `APP_KEYS`, etc.) is committed to this repo so you can clone and run immediately. This is fine here because it's a local teaching demo with no real users or data.
+
+**Do not do this in a real project.** In production, `.env` files belong in `.gitignore`, secrets should be generated per-environment, and anything leaked to git history must be rotated.
