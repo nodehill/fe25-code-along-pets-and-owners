@@ -7,8 +7,8 @@ import petSpecies from './data/petSpecies.json' with {type: 'json'};
 // note: prefer 127.0.0.1 before localhost
 // because node.js resolves fetches more reliable to 127.0.0.1
 const DELETE_BEFORE_SEEDING = true; // true/false
-const NUMBER_OF_PET_OWNERS = 5; // max 200
-const NUMBER_OF_PETS = 10; // max 500
+const NUMBER_OF_PET_OWNERS = 50; // max 200
+const NUMBER_OF_PETS = 200; // max 500
 const PETS_WITHOUT_OWNERS_PERCENT = 15;
 const MAX_PETS_PER_OWNER = 4;
 const STRAPI_HOST = "127.0.0.1";
