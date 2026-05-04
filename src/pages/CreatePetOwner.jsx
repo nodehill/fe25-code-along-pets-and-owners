@@ -10,7 +10,8 @@ CreatePetOwner.route = {
 export default function CreatePetOwner() {
 
   const formInitialState = {
-    name: '',
+    firstName: '',
+    lastName: '',
     email: ''
   };
 
@@ -31,11 +32,10 @@ export default function CreatePetOwner() {
 
   async function sendForm(event) {
     event.preventDefault();
-    // console.log(event)
-    await fetch('/api/petOwners', {
+    await fetch('/api/pet-owners', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
+      body: JSON.stringify({ data: formData })
     });
     setFormSent(true);
   }
@@ -58,8 +58,12 @@ export default function CreatePetOwner() {
       <h2>Create a new Pet owner</h2>
       <form onSubmit={sendForm}>
         <label>
-          Name:
-          <input required name="name" type="text" placeholder="Name" value={formData.name} onChange={updateFormData} />
+          First name:
+          <input required name="firstName" type="text" placeholder="First name" value={formData.firstName} onChange={updateFormData} />
+        </label>
+        <label>
+          Last name:
+          <input required name="lastName" type="text" placeholder="Last name" value={formData.lastName} onChange={updateFormData} />
         </label>
         <label>
           Email:
