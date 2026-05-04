@@ -99,7 +99,7 @@ async function createPets(ownerIds) {
     console.log(`Creating pet ${counter++}/${pets.length}`);
     console.log('Answer from Strapi', answer);
     console.log('');
-  }
+  }
 }
 
 // run everything
