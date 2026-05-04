@@ -17,14 +17,19 @@ export default function PetsAndOwners() {
   // useNavigate returns a function we can use to navigate to a route
   const navigate = useNavigate();
 
-  const [pets, petOwners, loading, update] = useFetch(
-    '/api/pets',
-    '/api/petOwners'
+  const [petsDataAndMeta, petOwnersDataAndMeta, loading, update] = useFetch(
+    '/api/pets?pagination[pageSize]=1000&populate=owner',
+    '/api/pet-owners?pagination[pageSize]=1000'
   );
 
   if (loading) { return; }
 
-  const petsByOwnerId = Object.groupBy(pets, eachPet => eachPet.ownerId);
+  const { data: pets } = petsDataAndMeta;
+  const { data: petOwners } = petOwnersDataAndMeta;
+
+  // Note that Object.groupBy has to construct as POJO (Plain Old JS Object)
+  // 
+  const petsByOwnerId = Object.groupBy(pets, p => p.owner?.documentId ?? null);
   const homelessPets = petsByOwnerId.null ?? [];
 
   return !loading && <>
@@ -38,17 +43,17 @@ export default function PetsAndOwners() {
     <h3>Pets by owner</h3>
     <section className="pet-owners">
       {
-        petOwners.map(({ id, name, email }) => {
+        petOwners.map(({ documentId: id, firstName, lastName, email }) => {
           const ownedPets = petsByOwnerId[id] ?? [];
           return <div key={id}>
-            <h4>{name}</h4>
-            <p>{name} has the email <a href={`mailto:${email}`}>{email}</a>.</p>
+            <h4>{firstName} {lastName}</h4>
+            <p>{firstName} {lastName} has the email <a href={`mailto:${email}`}>{email}</a>.</p>
             <button onClick={() => navigate('/update-owner/' + id)}>Edit {name}</button>
-            <button onClick={() => deletePetOwner(id, pets, update)}>Delete {name}</button>
+            <button onClick={() => deletePetOwner(id, update)}>Delete {name}</button>
             {ownedPets.length === 0 ? <p>{name} has no pets</p> : <>
               <p>{name} has the pets:</p>
               <ul>
-                {ownedPets.map(({ id, name, species }) => {
+                {ownedPets.map(({ documentId: id, name, species }) => {
                   // if the function body is wrapped in {} we must return explicitly
                   return <li key={id}>{name} {species}</li>;
                 })}
@@ -62,7 +67,7 @@ export default function PetsAndOwners() {
 
     <h3>Homeless pets</h3>
     <section className="pets">
-      {homelessPets.map(({ id, name, species }) => <div key={id}>
+      {homelessPets.map(({ documentId: id, name, species }) => <div key={id}>
         <h4>{name}</h4>
         <p>{name} is a {species}.</p>
       </div>)}
