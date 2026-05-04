@@ -6,6 +6,7 @@ import petSpecies from './data/petSpecies.json' with {type: 'json'};
 // config/settings
 // note: prefer 127.0.0.1 before localhost
 // because node.js resolves fetches more reliable to 127.0.0.1
+const DELETE_BEFORE_SEEDING = true; // true/false
 const NUMBER_OF_PET_OWNERS = 5; // max 200
 const NUMBER_OF_PETS = 10; // max 500
 const PETS_WITHOUT_OWNERS_PERCENT = 15;
@@ -102,6 +103,42 @@ async function createPets(ownerIds) {
   }
 }
 
+async function deleteAllPetsAndOwners() {
+  // get all pets currently in the strapi db
+  const petResponse = await fetch(
+    `http://${STRAPI_HOST}:${STRAPI_PORT}/api/pets?pagination[pageSize]=10000`
+  );
+  const { data: pets } = await petResponse.json();
+  // get all pet owners currently in the strapi db
+  const petOwnerResponse = await fetch(
+    `http://${STRAPI_HOST}:${STRAPI_PORT}/api/pet-owners?pagination[pageSize]=10000`
+  );
+  const { data: petOwners } = await petOwnerResponse.json();
+
+  console.log({ petsLength: pets.length, petOwnersLength: petOwners.length });
+
+  // delete all pets 
+  let counter = 1;
+  for (let { documentId } of pets) {
+    await fetch(
+      `http://${STRAPI_HOST}:${STRAPI_PORT}/api/pets/${documentId}`,
+      { method: 'DELETE' }
+    );
+    console.log(`Deleting pet ${counter++}/${pets.length}`);
+  }
+  // delete all petOwners
+  counter = 1;
+  for (let { documentId } of petOwners) {
+    await fetch(
+      `http://${STRAPI_HOST}:${STRAPI_PORT}/api/pet-owners/${documentId}`,
+      { method: 'DELETE' }
+    );
+    console.log(`Deleting pet owner ${counter++}/${petOwners.length}`);
+  }
+  console.log('');
+}
+
 // run everything
+DELETE_BEFORE_SEEDING && await deleteAllPetsAndOwners();
 const ownerIds = await createPetOwners();
 createPets(ownerIds);
