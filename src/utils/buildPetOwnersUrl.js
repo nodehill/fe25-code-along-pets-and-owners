@@ -3,7 +3,8 @@ import qs from 'qs';
 export default function buildPetOwnersUrl(search = '', page = 1, pageSize = 10) {
   const query = {
     pagination: { page, pageSize },
-    populate: 'pets'
+    populate: 'pets',
+    sort: ['firstName', 'lastName']
   };
   if (search) {
     query.filters = {
