@@ -22,19 +22,16 @@ export default function CreatePet() {
 
   const [
     petOwners,
-    pets,
+    uniqueSpecies,
     loading
   ] = useFetch(
     '/api/pet-owners?pagination[pageSize]=1000&sort=firstName,lastName',
-    '/api/pets?pagination[pageSize]=1000'
+    '/api/pets/species'
   );
 
   const [showSpeciesInput, setShowSpeciesInput] = useState(false);
 
   if (loading) { return; }
-
-  const unique_species = [...new Set(pets.map(pet => pet.species))].sort();
-
   function updateFormData(event) {
     const { name: key, value } = event.target;
     setFormData({ ...formData, [key]: value });
@@ -85,10 +82,10 @@ export default function CreatePet() {
         </label>
         <label>
           Species:
-          <select name="unique_species" onChange={setSpecies}>
+          <select name="uniqueSpecies" onChange={setSpecies}>
             <option key="" value="">Select species</option>
             {
-              unique_species.map(species => <option key={species} value={species}>{species}</option>)
+              uniqueSpecies.map(species => <option key={species} value={species}>{species}</option>)
             }
             <option value="__new__">Other (add new species..)</option>
           </select>
