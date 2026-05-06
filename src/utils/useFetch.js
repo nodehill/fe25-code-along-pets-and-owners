@@ -40,7 +40,7 @@ export default function useFetch(...urls) {
 // returns {data: [...], meta: {}} as its tructure
 //
 // For each response:
-// We add the meta properties to the data array using Objet.assign
+// We add the meta properties to the data array using Object.assign
 // and return the array directly :)
 //
 // This work since arrays are objects, i.e. can have properties
