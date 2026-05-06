@@ -19,11 +19,10 @@ export default function UpdatePetOwner() {
   const [formSent, setFormSent] = useState(false);
   const navigate = useNavigate();
 
-  const [petOwnerDataAndMeta, loading] = useFetch('/api/pet-owners/' + documentId);
-  const petOwner = petOwnerDataAndMeta?.data;
+  const [petOwner, loading] = useFetch('/api/pet-owners/' + documentId);
 
   useEffect(() => {
-    if (!loading && petOwnerDataAndMeta) {
+    if (!loading && petOwner) {
       const { firstName, lastName, email } = petOwner;
       setFormData({ firstName, lastName, email });
     }

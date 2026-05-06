@@ -17,15 +17,12 @@ export default function PetsAndOwners() {
   // useNavigate returns a function we can use to navigate to a route
   const navigate = useNavigate();
 
-  const [petsDataAndMeta, petOwnersDataAndMeta, loading, update] = useFetch(
+  const [pets, petOwners, loading, update] = useFetch(
     '/api/pets?pagination[pageSize]=1000&populate=owner',
     '/api/pet-owners?pagination[pageSize]=1000'
   );
 
   if (loading) { return; }
-
-  const { data: pets } = petsDataAndMeta;
-  const { data: petOwners } = petOwnersDataAndMeta;
 
   // Note that Object.groupBy has to construct as POJO (Plain Old JS Object)
   // 

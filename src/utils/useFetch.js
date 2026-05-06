@@ -21,7 +21,7 @@ export default function useFetch(...urls) {
     (async () => {
       // wait for all fetch+json promises to resolve
       // then set the data array
-      setData(await Promise.all(inProgress[urls]));
+      setData(combineDataAndMetaToArray(await Promise.all(inProgress[urls])));
       // set loading to false
       setLoading(false);
       // delete the urls key in inProgress
@@ -34,4 +34,10 @@ export default function useFetch(...urls) {
   // + an update function the component can use
   // to redo the fetch
   return [...data, loading, update];
+}
+
+// this simplifies working with Strapi that always
+// returns {data: [...], meta: {}} as its tructure
+function combineDataAndMetaToArray(dataArray) {
+  return dataArray.map(({ data, meta }) => Object.assign(data, meta));
 }

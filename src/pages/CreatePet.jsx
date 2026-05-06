@@ -21,11 +21,11 @@ export default function CreatePet() {
   const navigate = useNavigate();
 
   const [
-    petOwnersDataAndMeta,
-    petsDataAndMeta,
+    petOwners,
+    pets,
     loading
   ] = useFetch(
-    '/api/pet-owners?pagination[pageSize]=1000',
+    '/api/pet-owners?pagination[pageSize]=1000&sort=firstName,lastName',
     '/api/pets?pagination[pageSize]=1000'
   );
 
@@ -33,8 +33,6 @@ export default function CreatePet() {
 
   if (loading) { return; }
 
-  const { data: petOwners } = petOwnersDataAndMeta;
-  const { data: pets } = petsDataAndMeta;
   const unique_species = [...new Set(pets.map(pet => pet.species))].sort();
 
   function updateFormData(event) {
