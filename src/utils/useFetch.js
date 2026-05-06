@@ -38,6 +38,15 @@ export default function useFetch(...urls) {
 
 // this simplifies working with Strapi that always
 // returns {data: [...], meta: {}} as its tructure
+//
+// For each response:
+// We add the meta properties to the data array using Objet.assign
+// and return the array directly :)
+//
+// This work since arrays are objects, i.e. can have properties
+// as well as items in JS 
+// (but not in JSON - so Strapi can't give us this format)
+//
 function combineDataAndMetaToArray(dataArray) {
   return dataArray.map(({ data, meta }) => Object.assign(data, meta));
 }
