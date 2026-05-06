@@ -25,6 +25,11 @@ export default function PetOwners() {
 
   const { pageCount, total } = petOwners.pagination;
 
+  function searchByName(event) {
+    setSearch(event.target.value);
+    setPage(1); // important: reset page to 1 on new search
+  }
+
   function changePage(add) {
     setPage(page + add);
     scrollTo(0, 0);
@@ -34,7 +39,7 @@ export default function PetOwners() {
     <h3>Pet owners</h3>
     <label>
       Search by name:
-      <input type="text" value={search} onChange={event => setSearch(event.target.value)} />
+      <input type="text" value={search} onChange={searchByName} />
     </label>
     <p><b>Found: {total}</b></p>
     <section className="pet-owners">
