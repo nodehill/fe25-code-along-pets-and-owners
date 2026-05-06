@@ -19,6 +19,12 @@
     },
     "email": {
       "type": "email"
+    },
+    "pets": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::pet.pet",
+      "mappedBy": "owner"
     }
   }
 }

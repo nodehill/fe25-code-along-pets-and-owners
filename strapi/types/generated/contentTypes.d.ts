@@ -453,6 +453,7 @@ export interface ApiPetOwnerPetOwner extends Struct.CollectionTypeSchema {
       'api::pet-owner.pet-owner'
     > &
       Schema.Attribute.Private;
+    pets: Schema.Attribute.Relation<'oneToMany', 'api::pet.pet'>;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -478,7 +479,7 @@ export interface ApiPetPet extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::pet.pet'> &
       Schema.Attribute.Private;
     name: Schema.Attribute.String;
-    owner: Schema.Attribute.Relation<'oneToOne', 'api::pet-owner.pet-owner'>;
+    owner: Schema.Attribute.Relation<'manyToOne', 'api::pet-owner.pet-owner'>;
     publishedAt: Schema.Attribute.DateTime;
     species: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;

@@ -19,8 +19,9 @@
     },
     "owner": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::pet-owner.pet-owner"
+      "relation": "manyToOne",
+      "target": "api::pet-owner.pet-owner",
+      "inversedBy": "pets"
     }
   }
 }
