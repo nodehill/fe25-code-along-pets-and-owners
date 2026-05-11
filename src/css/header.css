@@ -14,7 +14,7 @@ header {
   }
 
   nav {
-    /* 
+    /*
       Clear fix
       See: https: //developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/display#flow-root
     */
@@ -39,6 +39,33 @@ header {
 
       &.active {
         color: var(--text-on-dark-active);
+      }
+    }
+  }
+
+  .auth {
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    color: var(--text-on-dark);
+
+    a {
+      color: var(--text-on-dark);
+      text-decoration: none;
+
+      &.active {
+        color: var(--text-on-dark-active);
+      }
+    }
+
+    button {
+      color: #333;
+      background-color: #ddd;
+      border-color: #ddd;
+
+      &:hover {
+        background-color: #eee;
+        border-color: #eee;
       }
     }
   }
