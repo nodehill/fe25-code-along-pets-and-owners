@@ -48,8 +48,8 @@ export default function CreatePetOwner() {
         setFormSent(false);
         setFormData({ ...formInitialState });
       }}>Create another pet owner</button>
-      <button onClick={() => navigate('/pets-and-owners')}>
-        See the list of pets and their owners</button>
+      <button onClick={() => navigate('/pet-owners')}>
+        See the list of pet owners</button>
     </>;
 
   } else {

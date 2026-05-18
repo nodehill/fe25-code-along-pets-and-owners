@@ -51,8 +51,8 @@ export default function UpdatePetOwner() {
 
     return <>
       <p>The pet owner {formData.name} has been updated</p>
-      <button onClick={() => navigate('/pets-and-owners')}>
-        Return to the list of pets and their owners</button>
+      <button onClick={() => navigate('/pet-owners')}>
+        Return to the list of pet owners</button>
     </>;
 
   } else {

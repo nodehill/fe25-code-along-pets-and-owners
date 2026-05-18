@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useOutletContext } from 'react-router';
 import useFetch from '../utils/useFetch';
+import uploadFile from '../utils/uploadFile';
 
 CreatePet.route = {
   path: '/create-pet',
@@ -10,6 +11,8 @@ CreatePet.route = {
 
 export default function CreatePet() {
 
+  const { user } = useOutletContext();
+
   const formInitialState = {
     name: '',
     species: '',
@@ -17,7 +20,9 @@ export default function CreatePet() {
   };
 
   const [formData, setFormData] = useState(formInitialState);
+  const [imageFile, setImageFile] = useState(null);
   const [formSent, setFormSent] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const [
@@ -39,10 +44,26 @@ export default function CreatePet() {
 
   async function sendForm(event) {
     event.preventDefault();
+    setError('');
+
+    // If the user picked an image, upload it first and remember the
+    // file's numeric id (Strapi's upload plugin still uses the integer
+    // id when attaching media to relations, even in v5).
+    let imageId = null;
+    if (imageFile) {
+      try {
+        const uploaded = await uploadFile(imageFile, user.jwt);
+        imageId = uploaded.id;
+      } catch (err) {
+        setError(err.message);
+        return;
+      }
+    }
+
     await fetch('/api/pets', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: formData },
+      body: JSON.stringify({ data: { ...formData, image: imageId } },
         // we are using '0' for ownerId since it works well as a value in the form
         // but the database/REST-api wants null so we transofrm
         (key, value) => key === 'owner' && value === '0' ? null : value)
@@ -66,9 +87,10 @@ export default function CreatePet() {
       <button onClick={() => {
         setFormSent(false);
         setFormData({ ...formInitialState });
+        setImageFile(null);
       }}>Create another pet </button>
-      <button onClick={() => navigate('/pets-and-owners')}>
-        See the list of pets and their owners</button>
+      <button onClick={() => navigate('/pets')}>
+        See the list of pets</button>
     </>;
 
   } else {
@@ -108,7 +130,22 @@ export default function CreatePet() {
           </select>
         </label>
 
+        {/* Image upload requires a logged-in user (Authenticated has
+            upload permission; Public does not — see README) */}
+        {user
+          ? <label>
+              Image (optional):
+              <input
+                type="file"
+                accept="image/*"
+                onChange={event => setImageFile(event.target.files[0] || null)}
+              />
+            </label>
+          : <p><small>Log in to also upload an image of the pet.</small></p>
+        }
+
         <button type="submit">Create</button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
     </>;
 
