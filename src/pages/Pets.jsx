@@ -66,8 +66,13 @@ export default function Pets() {
     <p><b>Found: {total}</b></p>
     <section className="pets">
       {
-        pets.map(({ documentId: id, name, species, owner }) => {
+        pets.map(({ documentId: id, name, species, owner, image }) => {
+          // Strapi auto-generates thumbnail variants on upload.
+          // Use the smallest one that exists, falling back to the original.
+          const imageUrl = image
+            && (image.formats?.thumbnail?.url || image.url);
           return <div key={id}>
+            {imageUrl && <img src={imageUrl} alt={name} />}
             <h4>{name}</h4>
             <p>{name} is a {species}.</p>
             {owner

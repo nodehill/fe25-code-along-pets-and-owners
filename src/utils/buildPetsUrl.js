@@ -3,7 +3,10 @@ import qs from 'qs';
 export default function buildPetsUrl(search = '', species = '', owner = '') {
   const query = {
     pagination: { pageSize: 1000 },
-    populate: 'owner',
+    // populate both the owner relation and the image media field so
+    // we get the file object (with url, formats etc.) back, not just
+    // its id
+    populate: ['owner', 'image'],
     sort: ['name']
   };
   const filters = {};

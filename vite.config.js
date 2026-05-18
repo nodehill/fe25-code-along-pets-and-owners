@@ -10,6 +10,13 @@ export default defineConfig({
         target: 'http://localhost:1337',
         changeOrigin: true,
         secure: false
+      },
+      // also proxy /uploads so <img src="/uploads/..."> works in dev
+      // (Strapi serves uploaded files as static under /uploads)
+      '/uploads': {
+        target: 'http://localhost:1337',
+        changeOrigin: true,
+        secure: false
       }
     }
   }
